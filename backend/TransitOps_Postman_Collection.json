@@ -1,0 +1,265 @@
+{
+  "info": {
+    "name": "TransitOps API",
+    "description": "API collection for the TransitOps Smart Transport Operations Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "bearer_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/auth/register", "host": [ "{{base_url}}" ], "path": [ "auth", "register" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@transitops.com\",\n  \"password\": \"password123\",\n  \"role\": \"FLEET_MANAGER\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"bearer_token\", jsonData.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/auth/login", "host": [ "{{base_url}}" ], "path": [ "auth", "login" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"manager@transitops.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get KPIs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/dashboard", "host": [ "{{base_url}}" ], "path": [ "dashboard" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "Get Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/vehicles", "host": [ "{{base_url}}" ], "path": [ "vehicles" ] }
+          }
+        },
+        {
+          "name": "Create Vehicle (Fleet Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/vehicles", "host": [ "{{base_url}}" ], "path": [ "vehicles" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"registration_number\": \"TRK-999\",\n  \"name_model\": \"Mack Anthem\",\n  \"type\": \"Truck\",\n  \"max_load_capacity\": 25000,\n  \"acquisition_cost\": 200000\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Vehicle (Fleet Manager)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/vehicles/<VEHICLE_ID>", "host": [ "{{base_url}}" ], "path": [ "vehicles", "<VEHICLE_ID>" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"RETIRED\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Drivers",
+      "item": [
+        {
+          "name": "Get Drivers",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/drivers", "host": [ "{{base_url}}" ], "path": [ "drivers" ] }
+          }
+        },
+        {
+          "name": "Create Driver (Fleet Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/drivers", "host": [ "{{base_url}}" ], "path": [ "drivers" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newdriver@transitops.com\",\n  \"password\": \"password123\",\n  \"name\": \"Alice Cooper\",\n  \"license_number\": \"DL-999\",\n  \"license_category\": \"Heavy\",\n  \"license_expiry_date\": \"2029-12-31\",\n  \"contact_number\": \"9990001111\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Driver",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/drivers/<DRIVER_ID>", "host": [ "{{base_url}}" ], "path": [ "drivers", "<DRIVER_ID>" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SUSPENDED\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trips",
+      "item": [
+        {
+          "name": "Get Trips",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/trips", "host": [ "{{base_url}}" ], "path": [ "trips" ] }
+          }
+        },
+        {
+          "name": "Create Draft Trip",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/trips", "host": [ "{{base_url}}" ], "path": [ "trips" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"Miami\",\n  \"destination\": \"Orlando\",\n  \"vehicle_id\": \"<VEHICLE_ID>\",\n  \"driver_id\": \"<DRIVER_ID>\",\n  \"cargo_weight\": 1200,\n  \"planned_distance\": 235\n}"
+            }
+          }
+        },
+        {
+          "name": "Dispatch Trip",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/trips/<TRIP_ID>/dispatch", "host": [ "{{base_url}}" ], "path": [ "trips", "<TRIP_ID>", "dispatch" ] }
+          }
+        },
+        {
+          "name": "Complete Trip",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/trips/<TRIP_ID>/complete", "host": [ "{{base_url}}" ], "path": [ "trips", "<TRIP_ID>", "complete" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"final_odometer\": 15800,\n  \"fuel_consumed\": 45,\n  \"fuel_cost\": 135\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel Trip",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/trips/<TRIP_ID>/cancel", "host": [ "{{base_url}}" ], "path": [ "trips", "<TRIP_ID>", "cancel" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance & Fuel",
+      "item": [
+        {
+          "name": "Start Maintenance",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/maintenance", "host": [ "{{base_url}}" ], "path": [ "maintenance" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_id\": \"<VEHICLE_ID>\",\n  \"description\": \"Tire Replacement\",\n  \"cost\": 800\n}"
+            }
+          }
+        },
+        {
+          "name": "Close Maintenance",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{bearer_token}}" } ],
+            "url": { "raw": "{{base_url}}/maintenance/<MAINTENANCE_LOG_ID>/close", "host": [ "{{base_url}}" ], "path": [ "maintenance", "<MAINTENANCE_LOG_ID>", "close" ] }
+          }
+        },
+        {
+          "name": "Add Fuel Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{bearer_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/fuel", "host": [ "{{base_url}}" ], "path": [ "fuel" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_id\": \"<VEHICLE_ID>\",\n  \"liters\": 50,\n  \"cost\": 150\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

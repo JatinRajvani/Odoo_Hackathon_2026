@@ -10,6 +10,9 @@ import MaintenancePage from './pages/MaintenancePage';
 import FuelPage from './pages/FuelPage';
 import VehicleDetailsPage from './pages/VehicleDetailsPage';
 import DriverDetailsPage from './pages/DriverDetailsPage';
+import CreateDeliveryTripPage from './pages/CreateDeliveryTripPage';
+import CreateInternalTripPage from './pages/CreateInternalTripPage';
+import TripDetailsPage from './pages/TripDetailsPage';
 import DriverPortalLayout from './layouts/DriverPortalLayout';
 import DriverDashboardPage from './pages/DriverDashboardPage';
 import DriverCurrentTripPage from './pages/DriverCurrentTripPage';
@@ -49,6 +52,9 @@ function AppRoutes() {
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/drivers/:id" element={<DriverDetailsPage />} />
         <Route path="/trips" element={<TripsPage />} />
+        <Route path="/trips/create-delivery" element={<CreateDeliveryTripPage />} />
+        <Route path="/trips/create-internal" element={<CreateInternalTripPage />} />
+        <Route path="/trips/:id" element={<TripDetailsPage />} />
         <Route path="/maintenance" element={<MaintenancePage />} />
         <Route path="/fuel" element={<FuelPage />} />
       </Route>

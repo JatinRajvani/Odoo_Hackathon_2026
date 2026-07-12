@@ -8,6 +8,7 @@ import DriversPage from './pages/DriversPage';
 import TripsPage from './pages/TripsPage';
 import MaintenancePage from './pages/MaintenancePage';
 import FuelPage from './pages/FuelPage';
+import VehicleDetailsPage from './pages/VehicleDetailsPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -29,6 +30,7 @@ function AppRoutes() {
       <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/vehicles" element={<VehiclesPage />} />
+        <Route path="/vehicles/:id" element={<VehicleDetailsPage />} />
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/trips" element={<TripsPage />} />
         <Route path="/maintenance" element={<MaintenancePage />} />

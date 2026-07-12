@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Plus, X, CheckCircle } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 interface Vehicle { id: string; registration_number: string; name_model: string; status: string; }
-interface MaintenanceLog {
-  id: string; description: string; cost: number; start_date: string; end_date: string | null;
-  is_active: boolean; vehicle_id: string;
-}
 
 export default function MaintenancePage() {
   const { user } = useAuth();
-  const [logs, setLogs] = useState<MaintenanceLog[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);

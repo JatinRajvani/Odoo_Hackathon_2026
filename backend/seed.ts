@@ -163,13 +163,69 @@ async function seed() {
   // 3. Trips
   console.log('Creating trips...');
   const trip1 = await prisma.trip.create({
-    data: { source: 'New York', destination: 'Boston', vehicle_id: vehicle2.id, driver_id: driver2.id, cargo_weight: 1000, planned_distance: 350, status: 'DISPATCHED', start_time: new Date() }
+    data: { 
+      source: 'Mumbai', 
+      destination: 'Pune', 
+      vehicle_id: vehicle2.id, 
+      driver_id: driver2.id, 
+      cargo_weight: 1000, 
+      planned_distance: 150, 
+      start_odometer: 4850,
+      status: 'DISPATCHED', 
+      start_time: new Date(),
+      trip_type: 'DELIVERY'
+    }
   });
   const trip2 = await prisma.trip.create({
-    data: { source: 'Los Angeles', destination: 'San Francisco', vehicle_id: vehicle1.id, driver_id: driver1.id, cargo_weight: 15000, planned_distance: 600, status: 'COMPLETED', start_time: new Date('2026-07-10T08:00:00Z'), end_time: new Date('2026-07-11T16:00:00Z'), final_odometer: 15600, fuel_consumed: 120 }
+    data: { 
+      source: 'Delhi', 
+      destination: 'Jaipur', 
+      vehicle_id: vehicle1.id, 
+      driver_id: driver1.id, 
+      cargo_weight: 15000, 
+      planned_distance: 270, 
+      start_odometer: 14730,
+      final_odometer: 15000,
+      actual_distance: 270,
+      status: 'COMPLETED', 
+      start_time: new Date('2026-07-10T08:00:00Z'), 
+      end_time: new Date('2026-07-10T14:00:00Z'), 
+      fuel_consumed: 90,
+      fuel_cost: 8500,
+      trip_type: 'DELIVERY'
+    }
   });
   const trip3 = await prisma.trip.create({
-    data: { source: 'Chicago', destination: 'Detroit', vehicle_id: vehicle1.id, driver_id: driver1.id, cargo_weight: 5000, planned_distance: 450, status: 'DRAFT' }
+    data: { 
+      source: 'Parking Yard', 
+      destination: 'Warehouse A', 
+      vehicle_id: vehicle1.id, 
+      driver_id: driver1.id, 
+      cargo_weight: 0, 
+      planned_distance: 15, 
+      start_odometer: 15000,
+      final_odometer: 15015,
+      actual_distance: 15,
+      status: 'COMPLETED', 
+      start_time: new Date('2026-07-11T09:00:00Z'), 
+      end_time: new Date('2026-07-11T09:45:00Z'), 
+      trip_type: 'INTERNAL',
+      reason: 'Parking Movement',
+      remarks: 'Repositioning truck from workshop to yard'
+    }
+  });
+  const trip4 = await prisma.trip.create({
+    data: { 
+      source: 'Warehouse', 
+      destination: 'Service Center', 
+      vehicle_id: vehicle1.id, 
+      driver_id: driver3.id, 
+      cargo_weight: 0, 
+      planned_distance: 20, 
+      status: 'DRAFT',
+      trip_type: 'INTERNAL',
+      reason: 'Service Visit'
+    }
   });
 
   // 4. Maintenance Logs & Expenses
@@ -186,14 +242,20 @@ async function seed() {
 
   // 5. Fuel Logs & Expenses
   await prisma.fuelLog.create({
-    data: { vehicle_id: vehicle1.id, liters: 120, cost: 360, date: new Date('2026-07-11T16:00:00Z') }
+    data: { vehicle_id: vehicle1.id, liters: 120, cost: 9500, date: new Date('2026-07-11T16:00:00Z') }
   });
   await prisma.expense.create({
-    data: { vehicle_id: vehicle1.id, expense_type: 'FUEL', amount: 360, description: 'Fuel log of 120 liters', date: new Date('2026-07-11T16:00:00Z') }
+    data: { vehicle_id: vehicle1.id, expense_type: 'FUEL', amount: 9500, description: 'Fuel log of 120 liters', date: new Date('2026-07-11T16:00:00Z') }
   });
   await prisma.expense.create({
-    data: { vehicle_id: vehicle2.id, expense_type: 'TOLL', amount: 15, description: 'Highway Toll' }
+    data: { vehicle_id: vehicle2.id, expense_type: 'TOLL', amount: 150, description: 'Highway Toll' }
   });
+
+  // 6. Odometer Logs
+  console.log('Seeding Odometer Logs...');
+  await prisma.odometerLog.create({ data: { vehicle_id: vehicle1.id, odometer: 14730, remarks: 'Trip #2 dispatch odometer' } });
+  await prisma.odometerLog.create({ data: { vehicle_id: vehicle1.id, odometer: 15000, remarks: 'Trip #2 completion odometer' } });
+  await prisma.odometerLog.create({ data: { vehicle_id: vehicle1.id, odometer: 15015, remarks: 'Internal yard transfer completion' } });
 
   console.log('✅ Database successfully seeded!');
 }

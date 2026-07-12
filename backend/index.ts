@@ -34,6 +34,7 @@ import tripRoutes from './src/routes/trip.routes';
 import maintenanceRoutes from './src/routes/maintenance.routes';
 import fuelRoutes from './src/routes/fuel.routes';
 import dashboardRoutes from './src/routes/dashboard.routes';
+import driverPortalRoutes from './src/routes/driverPortal.routes';
 
 // Setup auth routes
 app.use('/api/auth', authRoutes);
@@ -43,6 +44,7 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/fuel', fuelRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/driver-portal', driverPortalRoutes);
 
 // Start server
 app.listen(PORT, () => {

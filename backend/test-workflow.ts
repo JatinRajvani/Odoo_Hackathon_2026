@@ -18,9 +18,15 @@ async function runTest() {
     data: {
       registration_number: 'VAN-05',
       name_model: 'Ford Transit',
+      manufacturer: 'Ford',
       type: 'Van',
+      fuel_type: 'Diesel',
       max_load_capacity: 500,
       acquisition_cost: 30000,
+      rc_number: 'RC-VAN05',
+      rc_file_path: 'uploads/rc_van05.pdf',
+      insurance_file_path: 'uploads/ins_van05.pdf',
+      puc_file_path: 'uploads/puc_van05.pdf'
     }
   });
   console.log(`Vehicle ${vehicle.registration_number} status: ${vehicle.status}`);

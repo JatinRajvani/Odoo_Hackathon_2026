@@ -3,11 +3,13 @@ import { prisma } from '../../index';
 
 export const startMaintenance = async (req: Request, res: Response) => {
   try {
-    const { vehicle_id, description, cost } = req.body;
+    const { vehicle_id, description, cost, maintenance_type, garage, odometer } = req.body;
 
     const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicle_id } });
     if (!vehicle) return res.status(404).json({ error: 'Vehicle not found' });
     if (vehicle.status !== 'AVAILABLE') return res.status(400).json({ error: 'Vehicle must be available to undergo maintenance' });
+
+    const odoValue = odometer ? Number(odometer) : vehicle.odometer;
 
     const log = await prisma.$transaction([
       prisma.maintenanceLog.create({
@@ -15,7 +17,10 @@ export const startMaintenance = async (req: Request, res: Response) => {
           vehicle_id,
           description,
           cost: Number(cost),
-          is_active: true
+          is_active: true,
+          maintenance_type,
+          garage,
+          odometer: odoValue
         }
       }),
       prisma.vehicle.update({
@@ -26,6 +31,7 @@ export const startMaintenance = async (req: Request, res: Response) => {
 
     res.status(201).json(log[0]);
   } catch (error) {
+    console.error('Error starting maintenance:', error);
     res.status(500).json({ error: 'Failed to start maintenance' });
   }
 };

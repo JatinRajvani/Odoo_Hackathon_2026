@@ -38,6 +38,8 @@ enum ExpenseType {
   FUEL
   MAINTENANCE
   TOLL
+  PARKING
+  REPAIR
   OTHER
 }
 
@@ -56,12 +58,38 @@ model Vehicle {
   id                  String          @id @default(uuid())
   registration_number String          @unique
   name_model          String
+  manufacturer        String
   type                String
-  max_load_capacity   Float
-  odometer            Float           @default(0)
+  fuel_type           String          // Petrol, Diesel, CNG, Electric
+  acquisition_date    DateTime?
   acquisition_cost    Float
+  odometer            Float           @default(0)
+  max_load_capacity   Float
   status              VehicleStatus   @default(AVAILABLE)
   
+  // Documents (Mandatory RC, Insurance, PUC)
+  rc_number            String
+  rc_file_path         String
+  
+  insurance_company    String?
+  insurance_policy_num String?
+  insurance_type       String?         // Third Party, Comprehensive, Own Damage
+  insurance_start_date DateTime?
+  insurance_expiry_date DateTime?
+  insurance_file_path  String
+  
+  puc_number           String?
+  puc_expiry_date      DateTime?
+  puc_file_path        String
+  
+  permit_number        String?
+  permit_expiry_date   DateTime?
+  permit_file_path     String?
+  
+  // Additional Notes
+  description          String?
+  internal_remarks     String?
+
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
 
@@ -100,7 +128,9 @@ model Trip {
   start_time       DateTime?
   end_time         DateTime?
   final_odometer   Float?
+  actual_distance  Float?
   fuel_consumed    Float?
+  fuel_cost        Float?
 
   vehicle_id       String
   vehicle          Vehicle    @relation(fields: [vehicle_id], references: [id])
@@ -112,31 +142,36 @@ model Trip {
 }
 
 model MaintenanceLog {
-  id          String   @id @default(uuid())
-  description String
-  cost        Float
-  start_date  DateTime @default(now())
-  end_date    DateTime?
-  is_active   Boolean  @default(true) // Maps to In Shop status when true
+  id               String   @id @default(uuid())
+  description      String
+  cost             Float
+  start_date       DateTime @default(now())
+  end_date         DateTime?
+  is_active        Boolean  @default(true) // Maps to In Shop status when true
+  maintenance_type String?
+  garage           String?
+  odometer         Float?
 
-  vehicle_id  String
-  vehicle     Vehicle  @relation(fields: [vehicle_id], references: [id])
+  vehicle_id       String
+  vehicle          Vehicle  @relation(fields: [vehicle_id], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model FuelLog {
-  id         String   @id @default(uuid())
-  liters     Float
-  cost       Float
-  date       DateTime @default(now())
+  id           String   @id @default(uuid())
+  liters       Float
+  cost         Float
+  date         DateTime @default(now())
+  fuel_station String?
+  odometer     Float?
 
-  vehicle_id String
-  vehicle    Vehicle  @relation(fields: [vehicle_id], references: [id])
+  vehicle_id   String
+  vehicle      Vehicle  @relation(fields: [vehicle_id], references: [id])
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Expense {

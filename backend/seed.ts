@@ -38,13 +38,55 @@ async function seed() {
   // 2. Vehicles
   console.log('Creating vehicles...');
   const vehicle1 = await prisma.vehicle.create({
-    data: { registration_number: 'TRK-100', name_model: 'Volvo FH16', type: 'Truck', max_load_capacity: 20000, odometer: 15000, acquisition_cost: 150000, status: 'AVAILABLE' }
+    data: { 
+      registration_number: 'TRK-100', 
+      name_model: 'Volvo FH16', 
+      manufacturer: 'Volvo',
+      type: 'Truck', 
+      fuel_type: 'Diesel',
+      max_load_capacity: 20000, 
+      odometer: 15000, 
+      acquisition_cost: 150000, 
+      status: 'AVAILABLE',
+      rc_number: 'RC-TRK-100',
+      rc_file_path: 'uploads/rc_trk100.pdf',
+      insurance_file_path: 'uploads/insurance_trk100.pdf',
+      puc_file_path: 'uploads/puc_trk100.pdf'
+    }
   });
   const vehicle2 = await prisma.vehicle.create({
-    data: { registration_number: 'VAN-200', name_model: 'Ford Transit', type: 'Van', max_load_capacity: 1500, odometer: 5000, acquisition_cost: 35000, status: 'ON_TRIP' }
+    data: { 
+      registration_number: 'VAN-200', 
+      name_model: 'Ford Transit', 
+      manufacturer: 'Ford',
+      type: 'Van', 
+      fuel_type: 'Diesel',
+      max_load_capacity: 1500, 
+      odometer: 5000, 
+      acquisition_cost: 35000, 
+      status: 'ON_TRIP',
+      rc_number: 'RC-VAN-200',
+      rc_file_path: 'uploads/rc_van200.pdf',
+      insurance_file_path: 'uploads/insurance_van200.pdf',
+      puc_file_path: 'uploads/puc_van200.pdf'
+    }
   });
   const vehicle3 = await prisma.vehicle.create({
-    data: { registration_number: 'TRK-300', name_model: 'Scania R500', type: 'Truck', max_load_capacity: 18000, odometer: 45000, acquisition_cost: 130000, status: 'IN_SHOP' }
+    data: { 
+      registration_number: 'TRK-300', 
+      name_model: 'Scania R500', 
+      manufacturer: 'Scania',
+      type: 'Truck', 
+      fuel_type: 'Diesel',
+      max_load_capacity: 18000, 
+      odometer: 45000, 
+      acquisition_cost: 130000, 
+      status: 'IN_SHOP',
+      rc_number: 'RC-TRK-300',
+      rc_file_path: 'uploads/rc_trk300.pdf',
+      insurance_file_path: 'uploads/insurance_trk300.pdf',
+      puc_file_path: 'uploads/puc_trk300.pdf'
+    }
   });
 
   // 3. Trips

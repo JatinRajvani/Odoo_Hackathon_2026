@@ -6,6 +6,8 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 
+import path from 'path';
+
 dotenv.config();
 
 const connectionString = `${process.env.DATABASE_URL}`;
@@ -18,6 +20,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Basic health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {

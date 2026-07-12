@@ -71,19 +71,31 @@ export const completeTrip = async (req: Request, res: Response) => {
     const trip = await prisma.trip.findUnique({ where: { id: id as string } });
     if (!trip || trip.status !== 'DISPATCHED') return res.status(400).json({ error: 'Invalid trip state' });
 
+    const vehicle = await prisma.vehicle.findUnique({ where: { id: trip.vehicle_id } });
+    if (!vehicle) return res.status(404).json({ error: 'Vehicle not found' });
+
+    const finalOdoVal = Number(final_odometer);
+    if (finalOdoVal < vehicle.odometer) {
+      return res.status(400).json({ error: `Final odometer cannot be less than vehicle's current odometer (${vehicle.odometer} km)` });
+    }
+
+    const actual_distance = finalOdoVal - vehicle.odometer;
+
     await prisma.$transaction([
       prisma.trip.update({ 
         where: { id: id as string }, 
         data: { 
           status: 'COMPLETED', 
           end_time: new Date(), 
-          final_odometer: Number(final_odometer), 
-          fuel_consumed: Number(fuel_consumed) 
+          final_odometer: finalOdoVal, 
+          actual_distance,
+          fuel_consumed: Number(fuel_consumed),
+          fuel_cost: Number(fuel_cost)
         } 
       }),
       prisma.vehicle.update({ 
         where: { id: trip.vehicle_id }, 
-        data: { status: 'AVAILABLE', odometer: Number(final_odometer) } 
+        data: { status: 'AVAILABLE', odometer: finalOdoVal } 
       }),
       prisma.driver.update({ 
         where: { id: trip.driver_id }, 
@@ -95,7 +107,9 @@ export const completeTrip = async (req: Request, res: Response) => {
             vehicle_id: trip.vehicle_id,
             liters: Number(fuel_consumed),
             cost: Number(fuel_cost),
-            date: new Date()
+            date: new Date(),
+            fuel_station: 'Main Terminal',
+            odometer: finalOdoVal
           }
         }),
         prisma.expense.create({
@@ -112,6 +126,7 @@ export const completeTrip = async (req: Request, res: Response) => {
 
     res.json({ message: 'Trip completed successfully' });
   } catch (error) {
+    console.error('Error completing trip:', error);
     res.status(500).json({ error: 'Failed to complete trip' });
   }
 };

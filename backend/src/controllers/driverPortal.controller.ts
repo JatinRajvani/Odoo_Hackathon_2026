@@ -6,7 +6,7 @@ import path from 'path';
 // GET Profile for logged-in driver
 export const getProfile = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
 
     const driver = await prisma.driver.findUnique({
       where: { user_id: userId },
@@ -49,7 +49,7 @@ export const getProfile = async (req: Request, res: Response) => {
 // PUT change password
 export const changePassword = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
     const { oldPassword, newPassword } = req.body;
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -74,7 +74,7 @@ export const changePassword = async (req: Request, res: Response) => {
 // GET Dashboard metrics for driver
 export const getDashboard = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
 
     const driver = await prisma.driver.findUnique({
       where: { user_id: userId },
@@ -170,7 +170,7 @@ export const getDashboard = async (req: Request, res: Response) => {
 // GET driver trips
 export const getTrips = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
 
     const driver = await prisma.driver.findUnique({ where: { user_id: userId } });
     if (!driver) return res.status(404).json({ error: 'Driver profile not found' });
@@ -191,7 +191,7 @@ export const getTrips = async (req: Request, res: Response) => {
 // GET driver active trip
 export const getActiveTrip = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
 
     const driver = await prisma.driver.findUnique({ where: { user_id: userId } });
     if (!driver) return res.status(404).json({ error: 'Driver profile not found' });
@@ -211,7 +211,7 @@ export const getActiveTrip = async (req: Request, res: Response) => {
 // POST create internal trip
 export const createInternalTrip = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
     const { source, destination, planned_distance, reason, remarks } = req.body;
 
     const driver = await prisma.driver.findUnique({ where: { user_id: userId } });

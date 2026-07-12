@@ -12,9 +12,11 @@ import {
   addFuelLog,
   addExpenseLog,
   updateOdometer,
-  completeTrip
+  completeTrip,
+  updateProfileDocuments
 } from '../controllers/driverPortal.controller';
 import { authenticate } from '../middlewares/auth.middleware';
+import { driverUpload } from '../middlewares/driverUpload.middleware';
 
 const router = Router();
 
@@ -45,6 +47,7 @@ router.use(authenticate);
 // Profile
 router.get('/profile', getProfile);
 router.put('/profile/password', changePassword);
+router.put('/profile/documents', driverUpload, updateProfileDocuments);
 
 // Dashboard
 router.get('/dashboard', getDashboard);

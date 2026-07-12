@@ -444,3 +444,46 @@ export const completeTrip = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to complete trip' });
   }
 };
+
+// PUT update profile documents and identity fields
+export const updateProfileDocuments = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+    const { license_number, license_expiry_date, aadhaar_number } = req.body;
+
+    const driver = await prisma.driver.findUnique({ where: { user_id: userId } });
+    if (!driver) return res.status(404).json({ error: 'Driver profile not found' });
+
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+
+    const profile_photo_path = files?.['profile_photo']?.[0] ? `uploads/${files['profile_photo'][0].filename}` : driver.profile_photo_path;
+    const license_file_path = files?.['license_file']?.[0] ? `uploads/${files['license_file'][0].filename}` : driver.license_file_path;
+    const aadhaar_file_path = files?.['aadhaar_file']?.[0] ? `uploads/${files['aadhaar_file'][0].filename}` : driver.aadhaar_file_path;
+    const pan_file_path = files?.['pan_file']?.[0] ? `uploads/${files['pan_file'][0].filename}` : driver.pan_file_path;
+    const medical_cert_path = files?.['medical_cert']?.[0] ? `uploads/${files['medical_cert'][0].filename}` : driver.medical_cert_path;
+    const police_verification_path = files?.['police_verification']?.[0] ? `uploads/${files['police_verification'][0].filename}` : driver.police_verification_path;
+
+    const updateData: any = {
+      profile_photo_path,
+      license_file_path,
+      aadhaar_file_path,
+      pan_file_path,
+      medical_cert_path,
+      police_verification_path,
+    };
+
+    if (license_number) updateData.license_number = license_number;
+    if (license_expiry_date) updateData.license_expiry_date = new Date(license_expiry_date);
+    if (aadhaar_number) updateData.aadhaar_number = aadhaar_number;
+
+    const updatedDriver = await prisma.driver.update({
+      where: { id: driver.id },
+      data: updateData
+    });
+
+    res.json({ message: 'Profile documents updated successfully', driver: updatedDriver });
+  } catch (error) {
+    console.error('Error updating driver profile documents:', error);
+    res.status(500).json({ error: 'Failed to update profile documents' });
+  }
+};

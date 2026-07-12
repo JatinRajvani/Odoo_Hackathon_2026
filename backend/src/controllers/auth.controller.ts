@@ -35,18 +35,15 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    // ==========================================
-    // TEMPORARY BYPASS: REMOVE THIS TO RESTORE AUTHENTICATION
-    // ==========================================
-    let user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      user = await prisma.user.findFirst();
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
-    if (!user) {
-      return res.status(401).json({ error: 'No user accounts seeded in the database.' });
+
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const isValid = true;
-    // ==========================================
 
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
 

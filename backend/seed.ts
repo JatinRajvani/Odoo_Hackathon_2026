@@ -2,9 +2,19 @@ import { prisma } from './index';
 import bcrypt from 'bcryptjs';
 
 async function seed() {
-  console.log('Seeding database with sample data...');
+  const force = process.argv.includes('--force');
+  const userCount = await prisma.user.count();
+
+  if (userCount > 0 && !force) {
+    console.log('⚠️ Database already contains user records. Seeding skipped to prevent deleting your changes.');
+    console.log('💡 Tip: Run "npx tsx seed.ts --force" to reset and seed fresh data.');
+    return;
+  }
+
+  console.log('Seeding database with sample data (performing clean reset)...');
 
   // Clean up
+  await prisma.odometerLog.deleteMany();
   await prisma.expense.deleteMany();
   await prisma.fuelLog.deleteMany();
   await prisma.maintenanceLog.deleteMany();

@@ -323,57 +323,106 @@ export default function VehiclesPage() {
                   <th>Assigned Driver</th>
                   <th>Current Odometer</th>
                   <th>Insurance Expiry</th>
+                  <th>PUC Expiry</th>
+                  <th>Doc Alerts</th>
                   <th style={{ textAlign: 'center' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {vehicles.length === 0 ? (
                   <tr>
-                    <td colSpan={8}>
+                    <td colSpan={10}>
                       <div className="empty-state">
                         <p>No vehicles registered in fleet inventory.</p>
                       </div>
                     </td>
                   </tr>
-                ) : vehicles.map(v => (
-                  <tr key={v.id}>
-                    <td>
-                      <strong style={{ color: 'var(--primary)', cursor: 'pointer' }} onClick={() => navigate(`/vehicles/${v.id}`)}>
-                        {v.registration_number}
-                      </strong>
-                    </td>
-                    <td>
-                      <div><strong>{v.manufacturer}</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{v.name_model}</div>
-                    </td>
-                    <td>{v.type}</td>
-                    <td>
-                      <span className={`badge ${STATUS_BADGE[v.status] || 'badge-neutral'}`}>
-                        {v.status.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td>{v.assigned_driver}</td>
-                    <td>{v.odometer.toLocaleString()} km</td>
-                    <td>{v.insurance_expiry_date ? new Date(v.insurance_expiry_date).toLocaleDateString() : '—'}</td>
-                    <td>
-                      <div className="btn-group" style={{ justifyContent: 'center' }}>
-                        <button className="btn btn-sm btn-secondary" onClick={() => navigate(`/vehicles/${v.id}`)} title="View Detail Dashboard">
-                          <Eye size={14} />
-                        </button>
-                        {isManager && (
-                          <>
-                            <button className="btn btn-sm btn-warning" onClick={() => handleOpenEdit(v)} title="Edit Vehicle">
-                              <Edit size={14} />
-                            </button>
-                            <button className="btn btn-sm btn-danger" onClick={() => handleDelete(v.id, v.registration_number)} title="Delete Vehicle">
-                              <Trash2 size={14} />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                ) : vehicles.map(v => {
+                  const getExpiryAlerts = (veh: Vehicle) => {
+                    const alerts: { name: string; type: 'expired' | 'expiring' }[] = [];
+                    const checkDate = (dateStr: string | null, name: string) => {
+                      if (!dateStr) return;
+                      const expiry = new Date(dateStr);
+                      const now = new Date();
+                      const diffTime = expiry.getTime() - now.getTime();
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      if (diffDays < 0) {
+                        alerts.push({ name, type: 'expired' });
+                      } else if (diffDays <= 30) {
+                        alerts.push({ name, type: 'expiring' });
+                      }
+                    };
+                    checkDate(veh.insurance_expiry_date, 'INS');
+                    checkDate(veh.puc_expiry_date, 'PUC');
+                    return alerts;
+                  };
+                  const activeAlerts = getExpiryAlerts(v);
+
+                  return (
+                    <tr key={v.id}>
+                      <td>
+                        <strong style={{ color: 'var(--primary)', cursor: 'pointer' }} onClick={() => navigate(`/vehicles/${v.id}`)}>
+                          {v.registration_number}
+                        </strong>
+                      </td>
+                      <td>
+                        <div><strong>{v.manufacturer}</strong></div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{v.name_model}</div>
+                      </td>
+                      <td>{v.type}</td>
+                      <td>
+                        <span className={`badge ${STATUS_BADGE[v.status] || 'badge-neutral'}`}>
+                          {v.status.replace('_', ' ')}
+                        </span>
+                      </td>
+                      <td>{v.assigned_driver}</td>
+                      <td>{v.odometer.toLocaleString()} km</td>
+                      <td>{v.insurance_expiry_date ? new Date(v.insurance_expiry_date).toLocaleDateString() : '—'}</td>
+                      <td>{v.puc_expiry_date ? new Date(v.puc_expiry_date).toLocaleDateString() : '—'}</td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                          {activeAlerts.map((alert, idx) => (
+                            <span
+                              key={idx}
+                              style={{
+                                background: alert.type === 'expired' ? '#EF4444' : '#F59E0B',
+                                color: 'white',
+                                fontSize: '0.7rem',
+                                fontWeight: 'bold',
+                                padding: '2px 6px',
+                                borderRadius: '4px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '2px'
+                              }}
+                              title={alert.type === 'expired' ? 'Expired' : 'Expiring Soon'}
+                            >
+                              ⚠️ {alert.name}
+                            </span>
+                          ))}
+                          {activeAlerts.length === 0 && <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>—</span>}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="btn-group" style={{ justifyContent: 'center' }}>
+                          <button className="btn btn-sm btn-secondary" onClick={() => navigate(`/vehicles/${v.id}`)} title="View Detail Dashboard">
+                            <Eye size={14} />
+                          </button>
+                          {isManager && (
+                            <>
+                              <button className="btn btn-sm btn-warning" onClick={() => handleOpenEdit(v)} title="Edit Vehicle">
+                                <Edit size={14} />
+                              </button>
+                              <button className="btn btn-sm btn-danger" onClick={() => handleDelete(v.id, v.registration_number)} title="Delete Vehicle">
+                                <Trash2 size={14} />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

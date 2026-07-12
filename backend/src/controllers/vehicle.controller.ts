@@ -60,6 +60,8 @@ export const getVehicles = async (req: Request, res: Response) => {
         max_load_capacity: v.max_load_capacity,
         status: v.status,
         insurance_expiry_date: v.insurance_expiry_date,
+        puc_expiry_date: v.puc_expiry_date,
+        permit_expiry_date: v.permit_expiry_date,
         // Document paths
         rc_number: v.rc_number,
         rc_file_path: v.rc_file_path,

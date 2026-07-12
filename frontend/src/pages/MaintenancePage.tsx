@@ -145,7 +145,7 @@ export default function MaintenancePage() {
                   <input className="form-input" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="e.g. Engine Replacement" required />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Estimated Cost ($)</label>
+                  <label className="form-label">Estimated Cost (₹)</label>
                   <input className="form-input" type="number" value={form.cost} onChange={e => setForm({ ...form, cost: e.target.value })} required />
                 </div>
                 <div className="modal-actions">

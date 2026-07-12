@@ -244,7 +244,7 @@ export default function TripsPage() {
                     <input className="form-input" type="number" value={completeForm.fuel_consumed} onChange={e => setCompleteForm({ ...completeForm, fuel_consumed: e.target.value })} required />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Fuel Cost ($)</label>
+                    <label className="form-label">Fuel Cost (₹)</label>
                     <input className="form-input" type="number" value={completeForm.fuel_cost} onChange={e => setCompleteForm({ ...completeForm, fuel_cost: e.target.value })} required />
                   </div>
                 </div>

@@ -516,7 +516,7 @@ export default function VehiclesPage() {
 
                     <div className="form-row">
                       <div className="form-group">
-                        <label className="form-label">Acquisition Cost ($) *</label>
+                        <label className="form-label">Acquisition Cost (₹) *</label>
                         <input className="form-input" type="number" placeholder="Acquisition Price" value={form.acquisition_cost} onChange={e => setForm({ ...form, acquisition_cost: e.target.value })} required />
                       </div>
                       <div className="form-group">

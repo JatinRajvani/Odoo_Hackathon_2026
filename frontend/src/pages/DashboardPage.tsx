@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import {
-  Car, Truck, Users, Route, Clock, Activity, DollarSign, Gauge
+  Car, Truck, Users, Route, Clock, Activity, IndianRupee, Gauge
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell
@@ -39,7 +39,7 @@ export default function DashboardPage() {
     { label: 'Pending Trips', value: kpis.pendingTrips, icon: Clock, bg: '#FEF3C7', color: '#D97706' },
     { label: 'Drivers On Duty', value: kpis.driversOnDuty, icon: Users, bg: '#E0E7FF', color: '#4338CA' },
     { label: 'Fleet Utilization', value: `${kpis.fleetUtilization}%`, icon: Gauge, bg: 'var(--secondary-light)', color: 'var(--secondary)' },
-    { label: 'Total Cost', value: `$${Number(kpis.totalOperationalCost).toLocaleString()}`, icon: DollarSign, bg: 'var(--danger-light)', color: 'var(--danger)' },
+    { label: 'Total Cost', value: `₹${Number(kpis.totalOperationalCost).toLocaleString()}`, icon: IndianRupee, bg: 'var(--danger-light)', color: 'var(--danger)' },
   ];
 
   const barData = [

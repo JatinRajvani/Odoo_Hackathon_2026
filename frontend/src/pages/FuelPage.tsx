@@ -99,7 +99,7 @@ export default function FuelPage() {
                     <input className="form-input" type="number" step="0.1" value={form.liters} onChange={e => setForm({ ...form, liters: e.target.value })} required />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Cost ($)</label>
+                    <label className="form-label">Cost (₹)</label>
                     <input className="form-input" type="number" step="0.01" value={form.cost} onChange={e => setForm({ ...form, cost: e.target.value })} required />
                   </div>
                 </div>

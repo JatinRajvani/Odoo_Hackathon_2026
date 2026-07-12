@@ -342,7 +342,7 @@ export default function VehicleDetailsPage() {
                     <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Vehicle Type</td><td>{vehicle.type}</td></tr>
                     <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Fuel Type</td><td>{vehicle.fuel_type}</td></tr>
                     <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Acquisition Date</td><td>{vehicle.acquisition_date ? new Date(vehicle.acquisition_date).toLocaleDateString() : '—'}</td></tr>
-                    <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Acquisition Cost</td><td>${vehicle.acquisition_cost.toLocaleString()}</td></tr>
+                    <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Acquisition Cost</td><td>₹{vehicle.acquisition_cost.toLocaleString()}</td></tr>
                     <tr><td style={{ padding: '0.4rem 0', color: 'var(--text-secondary)' }}>Max Load Capacity</td><td>{vehicle.max_load_capacity.toLocaleString()} kg</td></tr>
                   </tbody>
                 </table>
@@ -368,17 +368,17 @@ export default function VehicleDetailsPage() {
                   </div>
                   <div style={{ background: 'white', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Fuel Costs</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px' }}>${stats.totalFuelCost.toLocaleString()}</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px' }}>₹{stats.totalFuelCost.toLocaleString()}</div>
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
                   <div style={{ background: 'white', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Maintenance Costs</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px', color: 'var(--accent)' }}>${stats.totalMaintenanceCost.toLocaleString()}</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px', color: 'var(--accent)' }}>₹{stats.totalMaintenanceCost.toLocaleString()}</div>
                   </div>
                   <div style={{ background: 'white', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Total Operational Cost</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px', color: 'var(--danger)' }}>${stats.totalOperationalCost.toLocaleString()}</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '2px', color: 'var(--danger)' }}>₹{stats.totalOperationalCost.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
@@ -544,7 +544,7 @@ export default function VehicleDetailsPage() {
                     <td>{new Date(m.start_date).toLocaleDateString()}</td>
                     <td><strong>{m.maintenance_type || 'Routine Service'}</strong></td>
                     <td>{m.garage || '—'}</td>
-                    <td>${m.cost.toLocaleString()}</td>
+                    <td>₹{m.cost.toLocaleString()}</td>
                     <td>{m.odometer ? `${m.odometer.toLocaleString()} km` : '—'}</td>
                     <td>
                       <span className={`badge ${m.is_active ? 'badge-warning' : 'badge-success'}`}>
@@ -611,17 +611,17 @@ export default function VehicleDetailsPage() {
               <div style={{ display: 'flex', gap: '2rem', justifyContent: 'space-around', flexWrap: 'wrap' }}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Total Fuel Expenses</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--secondary)', marginTop: '2px' }}>${stats.totalFuelCost.toLocaleString()}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--secondary)', marginTop: '2px' }}>₹{stats.totalFuelCost.toLocaleString()}</div>
                 </div>
                 <div style={{ width: '1px', background: 'var(--border)' }}></div>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Total Maintenance Expenses</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', marginTop: '2px' }}>${stats.totalMaintenanceCost.toLocaleString()}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', marginTop: '2px' }}>₹{stats.totalMaintenanceCost.toLocaleString()}</div>
                 </div>
                 <div style={{ width: '1px', background: 'var(--border)' }}></div>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Total Cumulative Expenses</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--danger)', marginTop: '2px' }}>${stats.totalOperationalCost.toLocaleString()}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--danger)', marginTop: '2px' }}>₹{stats.totalOperationalCost.toLocaleString()}</div>
                 </div>
               </div>
             </div>
@@ -651,7 +651,7 @@ export default function VehicleDetailsPage() {
                           <td>{new Date(f.date).toLocaleDateString()}</td>
                           <td><strong>{f.fuel_station || 'Terminal Station'}</strong></td>
                           <td>{f.liters} Liters</td>
-                          <td><strong>${f.cost.toLocaleString()}</strong></td>
+                          <td><strong>₹{f.cost.toLocaleString()}</strong></td>
                           <td>{f.odometer ? `${f.odometer.toLocaleString()} km` : '—'}</td>
                         </tr>
                       ))}
@@ -684,7 +684,7 @@ export default function VehicleDetailsPage() {
                           <td>
                             <span className="badge badge-info">{e.expense_type}</span>
                           </td>
-                          <td><strong>${e.amount.toLocaleString()}</strong></td>
+                          <td><strong>₹{e.amount.toLocaleString()}</strong></td>
                           <td>{e.description || '—'}</td>
                         </tr>
                       ))}
@@ -708,7 +708,7 @@ export default function VehicleDetailsPage() {
                 <div><strong>Maintenance Type:</strong> {selectedMaint.maintenance_type || 'Routine Service'}</div>
                 <div><strong>Service Provider / Garage:</strong> {selectedMaint.garage || '—'}</div>
                 <div><strong>Status:</strong> <span className={`badge ${selectedMaint.is_active ? 'badge-warning' : 'badge-success'}`}>{selectedMaint.is_active ? 'In Shop (Active)' : 'Closed'}</span></div>
-                <div><strong>Estimated/Actual Cost:</strong> ${selectedMaint.cost.toLocaleString()}</div>
+                <div><strong>Estimated/Actual Cost:</strong> ₹{selectedMaint.cost.toLocaleString()}</div>
                 <div><strong>Service Date:</strong> {new Date(selectedMaint.start_date).toLocaleDateString()}</div>
                 {selectedMaint.end_date && <div><strong>Closed Date:</strong> {new Date(selectedMaint.end_date).toLocaleDateString()}</div>}
                 <div><strong>Odometer reading:</strong> {selectedMaint.odometer ? `${selectedMaint.odometer.toLocaleString()} km` : '—'}</div>
@@ -745,7 +745,7 @@ export default function VehicleDetailsPage() {
                   <div><strong>Planned Distance:</strong> {selectedTrip.planned_distance} km</div>
                   <div><strong>Actual Distance:</strong> {selectedTrip.actual_distance ? `${selectedTrip.actual_distance} km` : '—'}</div>
                   <div><strong>Fuel Consumed:</strong> {selectedTrip.fuel_consumed ? `${selectedTrip.fuel_consumed} Liters` : '—'}</div>
-                  <div><strong>Fuel Cost:</strong> {selectedTrip.fuel_cost ? `$${selectedTrip.fuel_cost}` : '—'}</div>
+                  <div><strong>Fuel Cost:</strong> {selectedTrip.fuel_cost ? `₹${selectedTrip.fuel_cost}` : '—'}</div>
                 </div>
                 <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
                   <div><strong>Start Time:</strong> {selectedTrip.start_time ? new Date(selectedTrip.start_time).toLocaleString() : '—'}</div>
